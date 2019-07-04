@@ -6,6 +6,7 @@
 import gzip
 import io
 import json
+import logging
 import os
 import pickle
 from contextlib import contextmanager
@@ -17,6 +18,8 @@ import zstandard
 from bugbug import utils
 
 DATABASES = {}
+
+logger = logging.getLogger(__name__)
 
 
 def register(path, url, version, support_files=[]):
@@ -56,13 +59,13 @@ def download_support_file(path, file_name):
         url = urljoin(DATABASES[path]["url"], file_name)
         path = os.path.join(os.path.dirname(path), file_name)
 
-        print(f"Downloading {url} to {path}")
+        logger.info(f"Downloading {url} to {path}")
         utils.download_check_etag(url, path)
 
         if path.endswith(".zst"):
             extract_file(path)
     except requests.exceptions.HTTPError:
-        print(f"{file_name} is not yet available to download for {path}")
+        logger.exception(f"{file_name} is not yet available to download for {path}")
 
 
 def download_version(path):
@@ -80,11 +83,11 @@ def download(path, force=False, support_files_too=False):
     if not os.path.exists(zst_path) or force:
         url = DATABASES[path]["url"]
         try:
-            print(f"Downloading {url} to {zst_path}")
+            logger.info(f"Downloading {url} to {zst_path}")
             utils.download_check_etag(url, zst_path)
 
         except requests.exceptions.HTTPError:
-            print(f"{url} is not yet available to download")
+            logger.info(f"{url} is not yet available to download")
             raise
 
     extract_file(zst_path)

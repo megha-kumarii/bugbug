@@ -669,13 +669,15 @@ def download_component_mapping():
     }
 
 
-def download_commits(repo_dir, rev_start=0, ret=False, save=True):
+def download_commits(repo_dir, rev_start=0, ret=False, save=True, limit=None):
     hg = hglib.open(repo_dir)
 
     revs = get_revs(hg, rev_start)
     if len(revs) == 0:
         print("No commits to analyze")
         return []
+
+    print("REVS", revs, len(revs))
 
     first_pushdate = hg_log(hg, [b"0"])[0].pushdate
 
