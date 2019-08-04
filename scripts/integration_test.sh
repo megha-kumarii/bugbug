@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -euox pipefail
 
 # Script that run the whole data pipeline the fastest possible to validate

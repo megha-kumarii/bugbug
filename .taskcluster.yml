@@ -151,8 +151,7 @@ tasks:
                git -c advice.detachedHead=false checkout ${head_rev} &&
                pip install --quiet . &&
                pip install --quiet -r test-requirements.txt &&
-               sh --help &&
-               sh ./scripts/integration_test.sh"
+               bash ./scripts/integration_test.sh"
         metadata:
           name: bugbug integration test
           description: bugbug integration test
