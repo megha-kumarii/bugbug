@@ -32,3 +32,12 @@ docker-compose build --pull bugbug-base
 
 cd http_service/models;
 docker-compose build --build-arg CHECK_MODELS=0
+
+# Start the docker containers
+docker-compose up -d --force-recreate
+
+# Ensure we take down the containers at the end
+trap "docker-compose logs && docker-compose down" EXIT
+
+# Then check that we can correctly classify a bug
+sleep 5 && python ../tests/integration_test.py
