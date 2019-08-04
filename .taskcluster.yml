@@ -135,6 +135,29 @@ tasks:
           owner: ${user}@users.noreply.github.com
           source: ${repository}/raw/${head_rev}/.taskcluster.yml
 
+      - taskId: {$eval: as_slugid("integration_test")}
+        created: {$fromNow: ''}
+        deadline: {$fromNow: '1 hour'}
+        provisionerId: aws-provisioner-v1
+        workerType: github-worker
+        payload:
+          maxRunTime: 3600
+          image: python
+          command:
+            - "/bin/bash"
+            - "-lcx"
+            - "git clone --quiet ${repository} &&
+               cd bugbug &&
+               git -c advice.detachedHead=false checkout ${head_rev} &&
+               pip install --quiet . &&
+               pip install --quiet -r test-requirements.txt &&
+               ./scripts/integration_test.sh"
+        metadata:
+          name: bugbug packaging test
+          description: bugbug packaging test
+          owner: ${user}@users.noreply.github.com
+          source: ${repository}/raw/${head_rev}/.taskcluster.yml
+
       - taskId: {$eval: as_slugid("docker_build")}
         created: {$fromNow: ''}
         deadline: {$fromNow: '3 hours'}
