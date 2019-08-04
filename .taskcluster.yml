@@ -151,10 +151,10 @@ tasks:
                git -c advice.detachedHead=false checkout ${head_rev} &&
                pip install --quiet . &&
                pip install --quiet -r test-requirements.txt &&
-               ./scripts/integration_test.sh"
+               sh ./scripts/integration_test.sh"
         metadata:
-          name: bugbug packaging test
-          description: bugbug packaging test
+          name: bugbug integration test
+          description: bugbug integration test
           owner: ${user}@users.noreply.github.com
           source: ${repository}/raw/${head_rev}/.taskcluster.yml
 
