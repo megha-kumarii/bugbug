@@ -140,9 +140,13 @@ tasks:
         deadline: {$fromNow: '1 hour'}
         provisionerId: aws-provisioner-v1
         workerType: github-worker
+        scopes:
+          - secrets:get:project/relman/bugbug/deploy
         payload:
           maxRunTime: 3600
           image: python
+          env:
+            TASKCLUSTER_SECRET: project/relman/bugbug/deploy
           command:
             - "/bin/bash"
             - "-lcx"
